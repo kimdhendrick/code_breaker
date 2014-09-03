@@ -24,6 +24,7 @@ Note that the correct_colors_but_incorrect_locations_count does not include the 
 
 Example final integration spec:
 
+```
 it 'breaks the code' do
   code_maker = CodeMaker.new
 
@@ -31,3 +32,4 @@ it 'breaks the code' do
 
   code_maker.correct?(code).should be_true
 end
+```
