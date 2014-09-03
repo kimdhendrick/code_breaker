@@ -7,20 +7,25 @@ To write a CodeBreaker that can solve a mastermind game.
 You are given a CodeMaker that you can query for scoring of your guesses.
 
 Rules:
-1. You may not modify the CodeMaker source code.
-2. You may not interrogate the CodeMaker's internal representation of the secret code.
-3. You can ask the CodeMaker three questions:
-- correct_guess?
-- number_of_correct_colors
-- number_of_correct_locations
 
-Note that the number_of_correct_colors does not include the number_of_correct_locations.
+1. You can ask the CodeMaker two questions:
+  - correct?(guess)
+  - score(guess) which returns a tuple representing:
+    - correct_colors_and_locations_count
+    - correct_colors_but_incorrect_locations_count
+
+2. You may not modify the CodeMaker source code.
+
+3. You may not peek at the CodeMaker's secret code.
+
+Note that the correct_colors_but_incorrect_locations_count does not include the correct_colors_and_locations_count.
 
 Example final integration spec:
 
-it 'should break the code' do
+it 'breaks the code' do
   code_maker = CodeMaker.new
 
   code = CodeBreaker.new(code_maker).solve
-  code_maker.correct_guess?(code).should be_true
+
+  code_maker.correct?(code).should be_true
 end
