@@ -23,8 +23,8 @@ class CodeMaker
 
   class Score
     def initialize(code, guess)
-      @code = code
-      @guess = guess
+      @code = code.chars
+      @guess = guess.downcase.chars
     end
 
     def evaluate
@@ -32,7 +32,7 @@ class CodeMaker
     end
 
     def correct?
-      guess.downcase == code
+      guess == code
     end
 
     private
@@ -46,17 +46,21 @@ class CodeMaker
     def correct_colors_but_incorrect_locations_count
       return 0 if correct?
 
-      remaining_code, remaining_guess = parse_non_exact_matches
+      remaining_code, remaining_guess = non_exact_matches
 
       remaining_guess.chars.count { |char| remaining_code.sub!(char, '') }
     end
 
-    def parse_non_exact_matches
-      code.chars.zip(guess.downcase.chars).select { |a, b| a !=b }.transpose.map(&:join)
+    def non_exact_matches
+      select_matches { |a, b| a !=b }.transpose.map(&:join)
     end
 
     def exact_matches
-      code.chars.zip(guess.downcase.chars).select { |a, b| a ==b }
+      select_matches { |a, b| a ==b }
+    end
+
+    def select_matches(&block)
+      code.zip(guess).select &block
     end
   end
 end
